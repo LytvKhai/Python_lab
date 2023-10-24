@@ -31,12 +31,11 @@ R = 6371
 
 
 def data_extraction():
-    times = np.array(convert_to_seconds(line.split(",")[1]) for line in DATA)
-    latitude = np.array(float(line.split(",")[2]) for line in DATA)
-    print(latitude)
-    longitude = np.array(float(line.split(",")[4]) for line in DATA)
-    heights = np.array(float(line.split(",")[9]) for line in DATA)
-    h_accuracy = np.array(float(line.split(",")[8]) for line in DATA)
+    times = np.array([convert_to_seconds(line.split(",")[1]) for line in DATA])
+    latitude = np.array([float(line.split(",")[2]) for line in DATA])
+    longitude = np.array([float(line.split(",")[4]) for line in DATA])
+    heights = np.array([float(line.split(",")[9]) for line in DATA])
+    h_accuracy = np.array([float(line.split(",")[8]) for line in DATA])
     return times, latitude, longitude, heights, h_accuracy
 
 
@@ -49,6 +48,7 @@ def convert_to_seconds(time_str):
 
 
 def calculation_info(times_cv, heights_cv, h_accuracy_cv):
+    print(times_cv)
     time_diff = np.diff(times_cv)
 
     # Сумарна довжина маршруту
@@ -82,14 +82,21 @@ def calculation_info(times_cv, heights_cv, h_accuracy_cv):
     return speed, t_distance
 
 
-def distance(latitude, longitude):
-    latitude_cv = np.reshape(latitude, (len(latitude) / 2, 2))
-    longitude_cv = np.reshape(longitude, (len(longitude) / 2, 2))
-    array_cos_d = np.array(math.sin())
-
-
-def print_chart(times_cv, heights_cv, speed, t_distance):
+def print_chart(times_cv, heights_cv, speed, t_distance, latitude, longitude):
     time = np.array([convert_seconds_to_time(t) for t in times_cv])
+
+    latitude_s = np.array([line.split(",")[2] for line in DATA])
+    longitude_s = np.array([line.split(",")[4] for line in DATA])
+
+    #траєкторія руху літака в координатах (широта, довгота, висота)
+    fig = plt.figure(figsize=(12, 12))
+    ax = fig.add_subplot(111, projection="3d")
+    ax.scatter(latitude, longitude, heights_cv)
+    ax.set_xticklabels(latitude_s)
+    ax.set_yticklabels(longitude_s)
+    ax.set_xlabel("широта")
+    ax.set_ylabel("довгота")
+    ax.set_zlabel("висота")
 
     # Швидкість польоту від часу
     plt.figure(figsize=(20, plt.gcf().get_figheight()))
@@ -126,7 +133,7 @@ def convert_seconds_to_time(seconds):
 def _main():
     times, latitude, longitude, heights, h_accuracy = data_extraction()
     speed, t_distance = calculation_info(times, heights, h_accuracy)
-    print_chart(times, heights, speed, t_distance)
+    print_chart(times, heights, speed, t_distance, latitude, longitude)
 
 
 if __name__ == '__main__':
