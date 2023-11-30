@@ -31,6 +31,12 @@ def figures():
     print_figure(averaged_time_20_step, averaged_pitch_20_step,
                  f'Залежність усереднених кутів крену від часу(шаг {step} секунд)')
 
+    # графики разницы
+    print_triple_figure(time, heading, averaged_time_10_step, averaged_heading_10_step, averaged_time_20_step,
+                        averaged_heading_20_step, "Різниця залежністей кутів курсу від часу")
+    print_triple_figure(time, pitch, averaged_time_10_step, averaged_pitch_10_step, averaged_time_20_step,
+                        averaged_pitch_20_step, "Різниця залежністей кутів крену від часу")
+
 
 # Подсчёт статистических характеристик
 def statistical_characteristics():
@@ -67,6 +73,19 @@ def averaged_with_step(step):
 def print_figure(data_1, data_2, string):
     plt.figure(figsize=(12, 6))
     plt.plot(data_1, data_2)
+    plt.xlabel('Час (с)')
+    plt.ylabel('Кут (градуси)')
+    plt.title(string)
+    plt.show()
+
+
+# Созданий графических фигур разницы, с указанными данными и названием
+def print_triple_figure(data_1_1, data_1_2, data_2_1, data_2_2, data_3_1, data_3_2, string):
+    plt.figure(figsize=(12, 6))
+    plt.plot(data_1_1, data_1_2, label="Не усереднені")
+    plt.plot(data_2_1, data_2_2, label="Шаг 10 секунд")
+    plt.plot(data_3_1, data_3_2, label="Шаг 20 секунд")
+    plt.legend()
     plt.xlabel('Час (с)')
     plt.ylabel('Кут (градуси)')
     plt.title(string)
