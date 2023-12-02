@@ -2,11 +2,11 @@ import sqlite3
 from datetime import datetime, date, timedelta
 from random import randint
 
-
+# Створення тестових даних для БД та додавання їх у БД
 def create_test_data():
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-
+    # Створення даних
     documents_data = [(i, f'document_{i}', datetime.now().date(),
                        randint(1, 15)) for i in range(1, 16)]
     users_data = [(i, f'user_{i}', f'position_{i + randint(1, 100)}',
@@ -15,7 +15,7 @@ def create_test_data():
                          f'role_department_{16 - i}') for i in range(1, 16)]
     change_history_data = [(i, 16 - i, date(2023, 1, 1) + timedelta(days=i),
                             f'some change text №{i}') for i in range(1, 16)]
-
+    # Массове додавання у БД
     cursor.executemany('INSERT INTO documents VALUES (?, ?, ?, ?)',
                        documents_data)
     cursor.executemany(f'INSERT INTO users VALUES (?, ?, ?, ?)', users_data)
